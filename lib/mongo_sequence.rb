@@ -58,9 +58,9 @@ class MongoSequence
     if coll
       coll['current']
     else
-      raise Mongo::OperationFailure, 'No matching object found'
+      raise Moped::Errors::OperationFailure, 'No matching object found'
     end
-  rescue Mongo::OperationFailure => e
+  rescue Moped::Errors::OperationFailure => e
     raise unless e.message =~ /No matching object found/
     init_in_database
     current_after_update(update)
