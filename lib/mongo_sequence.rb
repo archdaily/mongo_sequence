@@ -1,7 +1,6 @@
 require "mongo"
 
 class MongoSequence
-
   class << self
     attr_writer :database
 
@@ -50,12 +49,8 @@ class MongoSequence
 
   def current_after_update(update)
     coll = collection.find_one_and_update({ _id: name }, update, return_document: :after)
-
-    if coll
-      coll['current']
-    else
-      raise Mongo::Error::OperationFailure, 'No matching object found'
-    end
+    return coll['current'] if coll
+    raise Mongo::Error::OperationFailure, 'No matching object found'
   rescue Mongo::Error::OperationFailure => e
     raise unless e.message =~ /No matching object found/
     init_in_database
@@ -63,6 +58,6 @@ class MongoSequence
   end
 
   def init_in_database
-    collection.save({ _id: name, current: 0 }, w: 1)
+    collection.insert_one({ _id: name, current: 0 }, w: 1)
   end
 end
