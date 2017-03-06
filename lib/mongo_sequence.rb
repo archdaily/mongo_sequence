@@ -35,7 +35,7 @@ class MongoSequence
   end
 
   def next
-    current_after_update(:$inc => { :current => 1 })
+    current_after_update(:$inc => { current: 1 })
   end
 
   def current
@@ -43,18 +43,14 @@ class MongoSequence
   end
 
   def current=(integer)
-    current_after_update(:current => integer)
+    current_after_update(current: integer)
   end
 
   private
 
   def current_after_update(update)
-    options = {
-      query:  { _id: name },
-      new:    true, # return the modified doc
-      update: update
-    }
-    coll = collection.find_and_modify(options)
+    coll = collection.find_one_and_update({ _id: name }, update, return_document: :after)
+
     if coll
       coll['current']
     else
