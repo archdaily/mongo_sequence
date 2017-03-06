@@ -50,23 +50,23 @@ class MongoSequence
 
   def current_after_update(update)
     options = {
-      :query  => { :_id => name },
-      :new    => true, # return the modified doc
-      :update => update
+      query:  { _id: name },
+      new:    true, # return the modified doc
+      update: update
     }
     coll = collection.find_and_modify(options)
     if coll
       coll['current']
     else
-      raise Moped::Errors::OperationFailure, 'No matching object found'
+      raise Mongo::Error::OperationFailure, 'No matching object found'
     end
-  rescue Moped::Errors::OperationFailure => e
+  rescue Mongo::Error::OperationFailure => e
     raise unless e.message =~ /No matching object found/
     init_in_database
     current_after_update(update)
   end
 
   def init_in_database
-    collection.save({:_id => name, :current => 0}, :w => 1)
+    collection.save({ _id: name, current: 0 }, w: 1)
   end
 end
