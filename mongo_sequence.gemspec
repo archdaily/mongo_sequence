@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = "mongo_sequence"
-  s.version     = '1.0.2'
+  s.version     = '1.0.3'
   s.authors     = ["Brian Hempel"]
   s.email       = ["plasticchicken@gmail.com"]
   s.homepage    = "https://github.com/brianhempel/mongo_sequence"
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "mongo", ">2.0"
+  s.add_dependency "mongo", ">1.1"
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "mongo_mapper"
